@@ -1,3 +1,4 @@
+import AlertPersonalization from '@/components/AlertPersonalization';
 import '@/global.css';
 
 import { NAV_THEME } from '@/lib/theme';
@@ -8,7 +9,7 @@ import { useNavigationContainerRef } from 'expo-router';
 import Drawer from 'expo-router/drawer';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'nativewind';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export {
   ErrorBoundary,
@@ -18,10 +19,12 @@ export default function RootLayout() {
   const { colorScheme } = useColorScheme();
   const navigationRef = useNavigationContainerRef();
 
+  const [openPersonalizationAlert, setOpenPersonalizationAlert] = useState<boolean>(false);
+
   useEffect(() => {
     const unsubscribe = navigationRef.addListener('state', async () => {
       const exists = await checkIfKeyExists('userName');
-      console.log(exists ? 'Key exists ✅' : 'Key does not exist ❌');
+      setOpenPersonalizationAlert(!exists);
     });
 
     return unsubscribe;
@@ -30,6 +33,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+      <AlertPersonalization open={openPersonalizationAlert} onOpenChange={setOpenPersonalizationAlert} />
       <Drawer>
         <Drawer.Screen name="index" options={{ headerShown: true }} />
       </Drawer>
