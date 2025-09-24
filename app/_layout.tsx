@@ -36,8 +36,11 @@ export default function RootLayout() {
     <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       <AlertPersonalization open={openPersonalizationAlert} onOpenChange={setOpenPersonalizationAlert} />
-      <Drawer>
+      <Drawer screenOptions={{
+        headerTintColor: "#3B82F6", // 👈 global color for hamburger & back button
+      }}>
         <Drawer.Screen name="index" options={{ headerShown: true, drawerLabel: "Home" }} />
+        <Drawer.Screen name="(settings)" options={{ headerShown: true, drawerLabel: "Settings", title: "Settings" }} />
       </Drawer>
       <PortalHost />
     </ThemeProvider>
