@@ -190,7 +190,25 @@ const HomeLandingPage = () => {
                                 end={{ x: 1, y: 1 }}
                                 className="w-full h-full items-center justify-center"
                             >
-                                <Text className="text-white text-xl font-bold">Start a call</Text>
+                                <Text className="text-white text-xl font-bold">Start a chat</Text>
+                            </LinearGradient>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View className="flex flex-col w-full gap-4 mb-6">
+                    <Text className="text-xl font-bold text-foreground">
+                        Call to your tutor
+                    </Text>
+                    <View className="w-full flex-row gap-2 items-center justify-center">
+                        <TouchableOpacity className="flex-1 max-h-24 items-center justify-center rounded-lg overflow-hidden" onPress={() => Alert.alert("Feature coming soon!")}>
+                            <LinearGradient
+                                colors={["#8B5CF6", "#6366F1"]} // violet-500 → indigo-500
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 1 }}
+                                className="w-full h-full items-center justify-center"
+                            >
+                                <Text className="text-white text-xl font-bold">Start a Call</Text>
                             </LinearGradient>
                         </TouchableOpacity>
                     </View>
