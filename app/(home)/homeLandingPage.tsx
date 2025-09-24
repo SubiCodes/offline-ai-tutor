@@ -15,6 +15,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { LinearGradient } from "expo-linear-gradient";
 
 const HomeLandingPage = () => {
     const [file, setFile] = useState<any>(null);
@@ -74,8 +75,8 @@ const HomeLandingPage = () => {
     );
 
     return (
-        <SafeAreaView className="flex-1 justify-start items-start bg-background px-6">
-            <ScrollView className="w-full">
+        <SafeAreaView className="flex-1 justify-start items-start bg-background px-6 pt-4" edges={["left", "right", "bottom"]}>
+            <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
 
                 {/* UPLOAD FILE */}
                 <View className="flex flex-col w-full gap-4 mb-6">
@@ -126,16 +127,74 @@ const HomeLandingPage = () => {
                         Create notes from file
                     </Text>
                     <View className="w-full flex-row gap-2 items-center justify-center">
-                        <TouchableOpacity className="flex-1 items-center justify-center" onPress={() => Alert.alert("Feature coming soon!")}>
-                            <Text>Card 1</Text>
+                        <TouchableOpacity className="flex-1 max-h-24 items-center justify-center rounded-lg overflow-hidden" onPress={() => Alert.alert("Feature coming soon!")}>
+                            <LinearGradient
+                                colors={["#3B82F6", "#06B6D4"]} // blue → cyan
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 1 }}
+                                className="w-full h-full items-center justify-center"
+                            >
+                                <Text className="text-white text-xl font-bold">Cheat Sheet</Text>
+                            </LinearGradient>
                         </TouchableOpacity>
-                        <TouchableOpacity className="flex-1 items-center justify-center" onPress={() => Alert.alert("Feature coming soon!")}>
-                            <Text>Card 2</Text>
+                        <TouchableOpacity className="flex-1 max-h-24 items-center justify-center rounded-lg overflow-hidden" onPress={() => Alert.alert("Feature coming soon!")}>
+                            <LinearGradient
+                                colors={["#3B82F6", "#06B6D4"]} // blue → cyan
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 1 }}
+                                className="w-full h-full items-center justify-center"
+                            >
+                                <Text className="text-white text-xl font-bold">Flash Cards</Text>
+                            </LinearGradient>
                         </TouchableOpacity>
                     </View>
                 </View>
 
+                <View className="flex flex-col w-full gap-4 mb-6">
+                    <Text className="text-xl font-bold text-foreground">
+                        Start a quiz
+                    </Text>
+                    <View className="w-full flex-row gap-2 items-center justify-center">
+                        <TouchableOpacity className="flex-1 max-h-24 items-center justify-center rounded-lg overflow-hidden" onPress={() => Alert.alert("Feature coming soon!")}>
+                            <LinearGradient
+                                colors={["#EC4899", "#F97316"]} // pink → orange
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 1 }}
+                                className="w-full h-full items-center justify-center"
+                            >
+                                <Text className="text-white text-xl font-bold">Multiple Choice</Text>
+                            </LinearGradient>
+                        </TouchableOpacity>
+                        <TouchableOpacity className="flex-1 max-h-24 items-center justify-center rounded-lg overflow-hidden" onPress={() => Alert.alert("Feature coming soon!")}>
+                            <LinearGradient
+                                colors={["#EC4899", "#F97316"]} // pink → orange
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 1 }}
+                                className="w-full h-full items-center justify-center"
+                            >
+                                <Text className="text-white text-xl font-bold">True or False</Text>
+                            </LinearGradient>
+                        </TouchableOpacity>
+                    </View>
+                </View>
 
+                <View className="flex flex-col w-full gap-4 mb-6">
+                    <Text className="text-xl font-bold text-foreground">
+                        Talk to your tutor
+                    </Text>
+                    <View className="w-full flex-row gap-2 items-center justify-center">
+                        <TouchableOpacity className="flex-1 max-h-24 items-center justify-center rounded-lg overflow-hidden" onPress={() => Alert.alert("Feature coming soon!")}>
+                            <LinearGradient
+                                colors={["#8B5CF6", "#EC4899"]} // violet-500 → pink-500
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 1 }}
+                                className="w-full h-full items-center justify-center"
+                            >
+                                <Text className="text-white text-xl font-bold">Start a call</Text>
+                            </LinearGradient>
+                        </TouchableOpacity>
+                    </View>
+                </View>
 
             </ScrollView>
         </SafeAreaView>
