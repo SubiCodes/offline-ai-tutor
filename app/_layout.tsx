@@ -64,8 +64,8 @@ export default function RootLayout() {
         drawerInactiveTintColor: "#9CA3AF", // inactive text/icon color
         drawerActiveBackgroundColor: "#E0F2FE", // optional highlight bg for active item
       }}>
-        <Drawer.Screen name="index" options={{
-          headerShown: true, drawerLabel: "Home",
+        <Drawer.Screen name="(home)" options={{
+          headerShown: false, drawerLabel: "Home",
           drawerIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
