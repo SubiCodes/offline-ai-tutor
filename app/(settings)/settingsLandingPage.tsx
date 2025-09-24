@@ -32,8 +32,21 @@ const SettingsLandingPage = () => {
               <Text className='text-lg text-foreground'>Change Tutor Approach</Text>
             </TouchableOpacity>
             <TouchableOpacity className='flex flex-row gap-2 items-center mb-4' onPress={() => router.push('/(settings)/changeAssist')}>
-              <Text className='text-foreground'><MaterialCommunityIcons name="google-assistant" size={20}/></Text>
+              <Text className='text-foreground'><MaterialCommunityIcons name="google-assistant" size={20} /></Text>
               <Text className='text-lg text-foreground'>Change Tutor Assist Mode</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View className={`flex-col gap-4 mb-6 border-b ${isDarkColorScheme ? 'border-gray-600' : 'border-gray-200'}`}>
+          <View className='flex flex-col'>
+            <Text className='text-xl text-foreground font-bold'>Themes</Text>
+            <Text className='text-lg text-gray-500'>Change theme for better experience</Text>
+          </View>
+          <View className='flex-col gap-2'>
+            <TouchableOpacity className='flex flex-row gap-2 items-center mb-4' onPress={() => router.push('/(settings)/changeThemes')}>
+              <Text className='text-foreground'><MaterialCommunityIcons name="theme-light-dark" size={20}/></Text>
+              <Text className='text-lg text-foreground'>Switch Themes</Text>
             </TouchableOpacity>
           </View>
         </View>

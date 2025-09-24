@@ -40,6 +40,13 @@ export default function AuthLayout() {
             headerShown: true,
           }}
         />
+        <Stack.Screen
+          name='changeThemes'
+          options={{
+            title: 'Change Themes',
+            headerShown: true,
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );

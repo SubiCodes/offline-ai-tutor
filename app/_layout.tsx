@@ -18,7 +18,8 @@ export {
 } from 'expo-router';
 
 export default function RootLayout() {
-  const { colorScheme } = useColorScheme();
+  const { setColorScheme, colorScheme } = useColorScheme();
+  const [ready, setReady] = useState(false);
   const navigationRef = useNavigationContainerRef();
 
   const [openPersonalizationAlert, setOpenPersonalizationAlert] = useState<boolean>(false);
@@ -31,6 +32,26 @@ export default function RootLayout() {
 
     return unsubscribe;
   }, [navigationRef]);
+
+  useEffect(() => {
+    const initTheme = async () => {
+      try {
+        const storedTheme = await AsyncStorage.getItem("theme"); // "light" | "dark" | null
+        if (storedTheme === "light" || storedTheme === "dark") {
+          setColorScheme(storedTheme);
+        } else {
+          setColorScheme("system"); // default
+        }
+      } catch (err) {
+        console.error("Error loading theme:", err);
+        setColorScheme("system");
+      } finally {
+        setReady(true);
+      }
+    };
+
+    initTheme();
+  }, []);
 
   return (
     <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
