@@ -12,6 +12,7 @@ import Drawer from 'expo-router/drawer';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'nativewind';
 import { useEffect, useState } from 'react';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export {
   ErrorBoundary,
@@ -59,9 +60,22 @@ export default function RootLayout() {
       <AlertPersonalization open={openPersonalizationAlert} onOpenChange={setOpenPersonalizationAlert} />
       <Drawer screenOptions={{
         headerTintColor: "#3B82F6", // 👈 global color for hamburger & back button
+        drawerActiveTintColor: "#3B82F6",   // active text/icon color
+        drawerInactiveTintColor: "#9CA3AF", // inactive text/icon color
+        drawerActiveBackgroundColor: "#E0F2FE", // optional highlight bg for active item
       }}>
-        <Drawer.Screen name="index" options={{ headerShown: true, drawerLabel: "Home" }} />
-        <Drawer.Screen name="(settings)" options={{ headerShown: false, drawerLabel: "Settings", title: "Settings" }} />
+        <Drawer.Screen name="index" options={{
+          headerShown: true, drawerLabel: "Home",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" size={size} color={color} />
+          ),
+        }} />
+        <Drawer.Screen name="(settings)" options={{
+          headerShown: false, drawerLabel: "Settings", title: "Settings",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" size={size} color={color} />
+          ),
+        }} />
       </Drawer>
       <PortalHost />
     </ThemeProvider>
