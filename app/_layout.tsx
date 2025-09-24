@@ -4,6 +4,7 @@ import '@/global.css';
 
 import { NAV_THEME } from '@/lib/theme';
 import { checkIfKeyExists } from '@/util/checkIfNewUser';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
 import { useNavigationContainerRef } from 'expo-router';
@@ -24,8 +25,12 @@ export default function RootLayout() {
 
   useEffect(() => {
     const unsubscribe = navigationRef.addListener('state', async () => {
-      const exists = await checkIfKeyExists('userName');
+      const exists = await checkIfKeyExists('name');
       setOpenPersonalizationAlert(!exists);
+      const name = await AsyncStorage.getItem('name');
+      const approach = await AsyncStorage.getItem('approach');
+      const assist = await AsyncStorage.getItem('assist');
+      console.log({ name, approach, assist });
     });
 
     return unsubscribe;

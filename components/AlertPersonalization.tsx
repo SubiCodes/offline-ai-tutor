@@ -11,6 +11,7 @@ import { Text } from "@/components/ui/text";
 import { Pressable, View } from "react-native";
 import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input"; // 👈 from react-native-reusables
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface AlertOverlayProps {
   open: boolean;
@@ -57,15 +58,21 @@ export default function AlertPersonalization({
     assist: "",
   });
 
-  const goToNext = () => {
-    if (currentIndex !== lessons.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
-    } else {
-      // ✅ Finished all steps → send data to parent
-      onFinish?.(answers);
-      onOpenChange(false);
-    }
-  };
+    const goToNext = async() => {
+        if (currentIndex !== lessons.length - 1) {
+        setCurrentIndex((prev) => prev + 1);
+        } else {
+            try {
+                await AsyncStorage.setItem('name', answers.name);
+                await AsyncStorage.setItem('approach', answers.approach);
+                await AsyncStorage.setItem('assist', answers.assist);
+            } catch (error) {
+                console.error("Failed to save personalization:", error);
+            }
+        onFinish?.(answers);
+        onOpenChange(false);
+        }
+    };
 
   const goToPrevious = () => {
     if (currentIndex > 0) setCurrentIndex((prev) => prev - 1);
