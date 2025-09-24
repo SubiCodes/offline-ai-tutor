@@ -1,3 +1,4 @@
+
 import AlertPersonalization from '@/components/AlertPersonalization';
 import '@/global.css';
 
@@ -35,7 +36,7 @@ export default function RootLayout() {
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       <AlertPersonalization open={openPersonalizationAlert} onOpenChange={setOpenPersonalizationAlert} />
       <Drawer>
-        <Drawer.Screen name="index" options={{ headerShown: true }} />
+        <Drawer.Screen name="index" options={{ headerShown: true, drawerLabel: "Home" }} />
       </Drawer>
       <PortalHost />
     </ThemeProvider>

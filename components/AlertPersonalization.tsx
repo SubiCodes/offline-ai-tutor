@@ -1,46 +1,197 @@
+import React, { useState } from "react";
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Text } from '@/components/ui/text';
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Text } from "@/components/ui/text";
+import { Pressable, View } from "react-native";
+import { Button } from "./ui/button";
+import { Input } from "@/components/ui/input"; // 👈 from react-native-reusables
 
-type AlertPersonalizationProps = {
+interface AlertOverlayProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-};
-
-const AlertPersonalization = ({ open, onOpenChange }: AlertPersonalizationProps) => {
-    return (
-        <AlertDialog open={open} onOpenChange={onOpenChange}>
-            <AlertDialogTrigger>
-                <Text>Show Alert Dialog</Text>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your account and remove
-                        your data from our servers.
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>
-                        <Text>Cancel</Text>
-                    </AlertDialogCancel>
-                    <AlertDialogAction>
-                        <Text>Continue</Text>
-                    </AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
-    )
+  onFinish?: (data: PersonalizationData) => void; // 👈 callback to parent
 }
 
-export default AlertPersonalization
+type PersonalizationData = {
+  name: string;
+  approach: "friendly" | "professional" | "";
+  assist: "hints" | "explanations" | "";
+};
+
+const lessons = [
+  {
+    key: "name",
+    title: "Who are you?",
+    description: "What would you like your AI tutor to call you?",
+  },
+  {
+    key: "approach",
+    title: "What approach do you prefer?",
+    description:
+      "Would you like your AI tutor to be more formal or casual in its responses?",
+  },
+  {
+    key: "assist",
+    title: "How would you like the tutor assist you?",
+    description:
+      "Would you like your AI tutor to provide hints before answers or just explanations?",
+  },
+];
+
+export default function AlertPersonalization({
+  open,
+  onOpenChange,
+  onFinish,
+}: AlertOverlayProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [answers, setAnswers] = useState<PersonalizationData>({
+    name: "",
+    approach: "",
+    assist: "",
+  });
+
+  const goToNext = () => {
+    if (currentIndex !== lessons.length - 1) {
+      setCurrentIndex((prev) => prev + 1);
+    } else {
+      // ✅ Finished all steps → send data to parent
+      onFinish?.(answers);
+      onOpenChange(false);
+    }
+  };
+
+  const goToPrevious = () => {
+    if (currentIndex > 0) setCurrentIndex((prev) => prev - 1);
+  };
+
+  const currentLesson = lessons[currentIndex];
+
+  // ✅ Check if current field is filled
+  const isCurrentFilled =
+    (currentLesson.key === "name" && answers.name.trim() !== "") ||
+    (currentLesson.key === "approach" && answers.approach !== "") ||
+    (currentLesson.key === "assist" && answers.assist !== "");
+
+  return (
+    <AlertDialog open={open} onOpenChange={onOpenChange} className="min-w-xl">
+      <AlertDialogContent className="max-w-[90%] min-w-[94%]">
+        <AlertDialogHeader>
+          <View className="flex-row items-center justify-between">
+            <AlertDialogTitle className="flex-1">
+              Personalize your AI Tutor
+            </AlertDialogTitle>
+          </View>
+        </AlertDialogHeader>
+
+        {/* Question */}
+        <View className="flex-col gap-1 mt-4">
+          <Text className="font-bold text-lg">{currentLesson.title}</Text>
+          <AlertDialogDescription>
+            {currentLesson.description}
+          </AlertDialogDescription>
+        </View>
+
+        {/* Input / Options depending on step */}
+        <View className="mt-4">
+          {currentLesson.key === "name" && (
+            <Input
+              placeholder="Enter your name"
+              value={answers.name}
+              onChangeText={(text) =>
+                setAnswers((prev) => ({ ...prev, name: text }))
+              }
+            />
+          )}
+
+          {currentLesson.key === "approach" && (
+            <View className="flex-col gap-2">
+              <Button
+                variant={answers.approach === "friendly" ? "default" : "outline"}
+                onPress={() =>
+                  setAnswers((prev) => ({ ...prev, approach: "friendly" }))
+                }
+                className="w-full"
+              >
+                <Text>Friendly & Casual</Text>
+              </Button>
+              <Button
+                variant={
+                  answers.approach === "professional" ? "default" : "outline"
+                }
+                onPress={() =>
+                  setAnswers((prev) => ({ ...prev, approach: "professional" }))
+                }
+                className="w-full"
+              >
+                <Text>Professional & Direct</Text>
+              </Button>
+            </View>
+          )}
+
+          {currentLesson.key === "assist" && (
+            <View className="flex-col gap-2">
+              <Button
+                variant={answers.assist === "hints" ? "default" : "outline"}
+                onPress={() =>
+                  setAnswers((prev) => ({ ...prev, assist: "hints" }))
+                }
+                className="w-full"
+              >
+                <Text>Hints before answers</Text>
+              </Button>
+              <Button
+                variant={
+                  answers.assist === "explanations" ? "default" : "outline"
+                }
+                onPress={() =>
+                  setAnswers((prev) => ({ ...prev, assist: "explanations" }))
+                }
+                className="w-full"
+              >
+                <Text>Just explanations</Text>
+              </Button>
+            </View>
+          )}
+        </View>
+
+        {/* Progress */}
+        <View className="flex-row items-center justify-center gap-2 mt-2">
+          <Text className="text-sm text-gray-500">
+            {currentIndex + 1} of {lessons.length}
+          </Text>
+        </View>
+
+        {/* Navigation */}
+        <AlertDialogFooter className="flex-row gap-2">
+          {currentIndex > 0 && (
+            <Pressable
+              onPress={goToPrevious}
+              className="flex-1 bg-gray-200 rounded-md py-3 items-center"
+            >
+              <Text className="text-gray-700 font-medium">Previous</Text>
+            </Pressable>
+          )}
+
+          <Pressable
+            onPress={goToNext}
+            disabled={!isCurrentFilled} // ✅ disable if empty
+            className={`flex-1 rounded-md py-3 items-center ${
+              isCurrentFilled ? "bg-blue-500" : "bg-gray-400"
+            }`}
+          >
+            <Text className="text-white font-medium">
+              {currentIndex === lessons.length - 1 ? "Finish" : "Next"}
+            </Text>
+          </Pressable>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
