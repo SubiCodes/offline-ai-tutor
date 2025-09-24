@@ -68,6 +68,8 @@ const HomeLandingPage = () => {
     return (
         <SafeAreaView className="flex-1 justify-start items-start bg-background px-6">
             <ScrollView className="w-full">
+
+                {/* UPLOAD FILE */}
                 <View className="flex flex-col w-full gap-4 mb-6">
                     <Text className="text-xl font-bold text-foreground">
                         Uploaded File
@@ -90,7 +92,7 @@ const HomeLandingPage = () => {
                                     </View>
 
                                     {/* Trash button */}
-                                    <TouchableOpacity onPress={() => {removeFile()}}>
+                                    <TouchableOpacity onPress={() => { removeFile() }}>
                                         <EvilIcons name="trash" size={28} color="red" />
                                     </TouchableOpacity>
                                 </View>
@@ -110,6 +112,18 @@ const HomeLandingPage = () => {
                         </TouchableOpacity>
                     )}
                 </View>
+
+                <View className="flex flex-col w-full gap-4 mb-6">
+                    <Text className="text-xl font-bold text-foreground">
+                        Create notes from file
+                    </Text>
+                    <View className="w-full flex-row gap-2">
+
+                    </View>
+                </View>
+
+
+
             </ScrollView>
         </SafeAreaView>
     );
