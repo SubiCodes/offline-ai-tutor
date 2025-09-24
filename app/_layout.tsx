@@ -27,10 +27,6 @@ export default function RootLayout() {
     const unsubscribe = navigationRef.addListener('state', async () => {
       const exists = await checkIfKeyExists('name');
       setOpenPersonalizationAlert(!exists);
-      const name = await AsyncStorage.getItem('name');
-      const approach = await AsyncStorage.getItem('approach');
-      const assist = await AsyncStorage.getItem('assist');
-      console.log({ name, approach, assist });
     });
 
     return unsubscribe;
