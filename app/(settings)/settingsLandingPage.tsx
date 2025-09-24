@@ -4,7 +4,6 @@ import React from 'react'
 import { useRouter } from 'expo-router'
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useColorScheme } from 'nativewind';
 
