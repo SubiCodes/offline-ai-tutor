@@ -7,6 +7,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "expo-router";
 import { Button } from "@/components/ui/button";
 import EvilIcons from '@expo/vector-icons/EvilIcons';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 
 const HomeLandingPage = () => {
     const [file, setFile] = useState<any>(null);
@@ -117,8 +125,13 @@ const HomeLandingPage = () => {
                     <Text className="text-xl font-bold text-foreground">
                         Create notes from file
                     </Text>
-                    <View className="w-full flex-row gap-2">
-
+                    <View className="w-full flex-row gap-2 items-center justify-center">
+                        <TouchableOpacity className="flex-1 items-center justify-center" onPress={() => Alert.alert("Feature coming soon!")}>
+                            <Text>Card 1</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity className="flex-1 items-center justify-center" onPress={() => Alert.alert("Feature coming soon!")}>
+                            <Text>Card 2</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
