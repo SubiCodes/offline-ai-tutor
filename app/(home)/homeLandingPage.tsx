@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
@@ -20,6 +20,7 @@ import { extractTextFromFile } from "@/util/textExtractionFromFiles";
 
 const HomeLandingPage = () => {
     const [file, setFile] = useState<any>(null);
+    const uploadingStateRef = useRef<null | string>(null);
 
     const getCurrentFile = async () => {
         const stored = await AsyncStorage.getItem("tutorKnowledge");
@@ -41,6 +42,8 @@ const HomeLandingPage = () => {
 
         if (result.canceled) return;
 
+        uploadingStateRef.current = "Uploading...";
+
         const fileData = result.assets[0];
 
         const storedFile = {
@@ -49,14 +52,20 @@ const HomeLandingPage = () => {
             mimeType: fileData.mimeType,
         };
 
+        uploadingStateRef.current = "Extracting data...";
+
         const res = await extractTextFromFile(storedFile);
 
         if (!res.success) {
             return;
-        }
+        };
+
+        uploadingStateRef.current = "Storing data...";
 
         await AsyncStorage.setItem("tutorKnowledge", JSON.stringify(storedFile));
         setFile(storedFile);
+
+        uploadingStateRef.current = null;
     };
 
     const clearFile = async () => {
