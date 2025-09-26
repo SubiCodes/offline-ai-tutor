@@ -23,6 +23,7 @@ const HomeLandingPage = () => {
     const [file, setFile] = useState<any>(null);
     const [uploadingState, setUploadingState] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState<boolean>(false);
+    const [uploadingProgress, setUploadingProgress] = useState<number>(0);
 
     const getCurrentFile = async () => {
         const stored = await AsyncStorage.getItem("tutorKnowledge");
@@ -47,6 +48,7 @@ const HomeLandingPage = () => {
             if (result.canceled) return;
 
             setUploadingState("Uploading...");
+            setUploadingProgress(25);
 
             const fileData = result.assets[0];
 
@@ -57,6 +59,7 @@ const HomeLandingPage = () => {
             };
 
             setUploadingState("Extracting data...");
+            setUploadingProgress(60);
 
             const res = await extractTextFromFile(storedFile);
 
@@ -65,15 +68,19 @@ const HomeLandingPage = () => {
             };
 
             setUploadingState("Storing data...");
+            setUploadingProgress(80);
 
             await AsyncStorage.setItem("tutorKnowledge", JSON.stringify(storedFile));
             setFile(storedFile);
+
+            setUploadingProgress(100);
 
         } catch (error) {
             console.error("Error picking file:", error);
         } finally {
             setIsUploading(false);
             setUploadingState(null);
+            setUploadingProgress(0);
         }
     };
 
@@ -101,7 +108,7 @@ const HomeLandingPage = () => {
 
     return (
         <SafeAreaView className="flex-1 justify-start items-start bg-background px-6 pt-4" edges={["left", "right", "bottom"]}>
-            <AlertLoadingWithState open={isUploading} onOpenChange={() => { }} currentState={uploadingState} activity="Processing File" />
+            <AlertLoadingWithState open={isUploading} onOpenChange={() => { }} currentState={uploadingState} activity="Processing File" progress={uploadingProgress}/>
 
             <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
 
