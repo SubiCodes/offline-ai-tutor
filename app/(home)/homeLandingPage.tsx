@@ -16,6 +16,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { LinearGradient } from "expo-linear-gradient";
+import { extractTextFromFile } from "@/util/textExtractionFromFiles";
 
 const HomeLandingPage = () => {
     const [file, setFile] = useState<any>(null);
@@ -47,6 +48,12 @@ const HomeLandingPage = () => {
             name: fileData.name,
             mimeType: fileData.mimeType,
         };
+
+        const res = await extractTextFromFile(storedFile);
+
+        if (!res.success) {
+            return;
+        }
 
         await AsyncStorage.setItem("tutorKnowledge", JSON.stringify(storedFile));
         setFile(storedFile);

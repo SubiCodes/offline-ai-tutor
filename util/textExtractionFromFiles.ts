@@ -1,4 +1,5 @@
 import * as FileSystem from "expo-file-system";
+import { extractTextFromPdf } from "@/api/extractTextFromPdf";
 
 type PickedFile = {
     uri: string;
@@ -26,7 +27,8 @@ export async function extractTextFromFile(file: PickedFile): Promise<ExtractedTe
 
         // ---- PDF ----
         if (mimeType === "application/pdf" || name.toLowerCase().endsWith(".pdf")) {
-           
+           const res = await extractTextFromPdf(file);
+           return res;
         }
 
         // ---- DOC / DOCX ----
