@@ -1,5 +1,6 @@
 import * as FileSystem from "expo-file-system";
 import { extractTextFromPdf } from "@/api/extractTextFromPdf";
+import { Alert } from "react-native";
 
 type PickedFile = {
     uri: string;
@@ -39,7 +40,12 @@ export async function extractTextFromFile(file: PickedFile): Promise<ExtractedTe
             name.toLowerCase().endsWith(".doc") ||
             name.toLowerCase().endsWith(".docx")
         ) {
-            //   return "[⚠ DOC/DOCX parsing not implemented. Please upload .txt for now]";
+            Alert.alert(
+                "Unsupported File Type",
+                "DOC and DOCX files are not supported yet. Please convert your document to PDF or TXT format and try again.",
+                [{ text: "OK" }]
+            );
+            return { success: false, error: "DOC/DOCX files are not supported yet." };
         }
 
         // ---- Unsupported ----
