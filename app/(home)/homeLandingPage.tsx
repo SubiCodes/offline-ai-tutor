@@ -17,10 +17,12 @@ import {
 } from '@/components/ui/card';
 import { LinearGradient } from "expo-linear-gradient";
 import { extractTextFromFile } from "@/util/textExtractionFromFiles";
+import AlertLoadingWithState from "@/components/AlertLoadingWithState";
 
 const HomeLandingPage = () => {
     const [file, setFile] = useState<any>(null);
-    const uploadingStateRef = useRef<null | string>(null);
+    const [uploadingState, setUploadingState] = useState<string | null>(null);
+    const [isUploading, setIsUploading] = useState<boolean>(false);
 
     const getCurrentFile = async () => {
         const stored = await AsyncStorage.getItem("tutorKnowledge");
@@ -30,42 +32,49 @@ const HomeLandingPage = () => {
     };
 
     const pickFile = async () => {
-        const result = await DocumentPicker.getDocumentAsync({
-            type: [
-                "text/plain",
-                "application/pdf",
-                "application/msword",
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            ],
-            copyToCacheDirectory: true,
-        });
+        setIsUploading(true);
+        try {
+            const result = await DocumentPicker.getDocumentAsync({
+                type: [
+                    "text/plain",
+                    "application/pdf",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                ],
+                copyToCacheDirectory: true,
+            });
 
-        if (result.canceled) return;
+            if (result.canceled) return;
 
-        uploadingStateRef.current = "Uploading...";
+            setUploadingState("Uploading...");
 
-        const fileData = result.assets[0];
+            const fileData = result.assets[0];
 
-        const storedFile = {
-            uri: fileData.uri,
-            name: fileData.name,
-            mimeType: fileData.mimeType,
-        };
+            const storedFile = {
+                uri: fileData.uri,
+                name: fileData.name,
+                mimeType: fileData.mimeType,
+            };
 
-        uploadingStateRef.current = "Extracting data...";
+            setUploadingState("Extracting data...");
 
-        const res = await extractTextFromFile(storedFile);
+            const res = await extractTextFromFile(storedFile);
 
-        if (!res.success) {
-            return;
-        };
+            if (!res.success) {
+                return;
+            };
 
-        uploadingStateRef.current = "Storing data...";
+            setUploadingState("Storing data...");
 
-        await AsyncStorage.setItem("tutorKnowledge", JSON.stringify(storedFile));
-        setFile(storedFile);
+            await AsyncStorage.setItem("tutorKnowledge", JSON.stringify(storedFile));
+            setFile(storedFile);
 
-        uploadingStateRef.current = null;
+        } catch (error) {
+            console.error("Error picking file:", error);
+        } finally {
+            setIsUploading(false);
+            setUploadingState(null);
+        }
     };
 
     const clearFile = async () => {
@@ -92,6 +101,8 @@ const HomeLandingPage = () => {
 
     return (
         <SafeAreaView className="flex-1 justify-start items-start bg-background px-6 pt-4" edges={["left", "right", "bottom"]}>
+            <AlertLoadingWithState open={isUploading} onOpenChange={() => { }} currentState={uploadingState} activity="Processing File" />
+
             <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
 
                 {/* UPLOAD FILE */}
