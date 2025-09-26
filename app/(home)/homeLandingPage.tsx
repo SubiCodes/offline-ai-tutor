@@ -18,6 +18,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { extractTextFromFile } from "@/util/textExtractionFromFiles";
 import AlertLoadingWithState from "@/components/AlertLoadingWithState";
+import { getEmbedding } from "@/api/embedUploadedText";
 
 const HomeLandingPage = () => {
     const [file, setFile] = useState<any>(null);
@@ -67,6 +68,12 @@ const HomeLandingPage = () => {
                 return;
             };
 
+            if (res.text && res.text.length) {
+                setUploadingState("Embedding data...");
+                setUploadingProgress(60);
+                const embeddedText = await getEmbedding(res.text);
+            }
+
             setUploadingState("Storing data...");
             setUploadingProgress(80);
 
@@ -108,7 +115,7 @@ const HomeLandingPage = () => {
 
     return (
         <SafeAreaView className="flex-1 justify-start items-start bg-background px-6 pt-4" edges={["left", "right", "bottom"]}>
-            <AlertLoadingWithState open={isUploading} onOpenChange={() => { }} currentState={uploadingState} activity="Processing File" progress={uploadingProgress}/>
+            <AlertLoadingWithState open={isUploading} onOpenChange={() => { }} currentState={uploadingState} activity="Processing File" progress={uploadingProgress} />
 
             <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
 
