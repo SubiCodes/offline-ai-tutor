@@ -19,6 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { extractTextFromFile } from "@/util/textExtractionFromFiles";
 import AlertLoadingWithState from "@/components/AlertLoadingWithState";
 import { getEmbedding } from "@/api/embedUploadedText";
+import { storeEmbeddings } from "@/db/storeEmbeddings";
 
 const HomeLandingPage = () => {
     const [file, setFile] = useState<any>(null);
@@ -49,7 +50,7 @@ const HomeLandingPage = () => {
             if (result.canceled) return;
 
             setUploadingState("Uploading...");
-            setUploadingProgress(25);
+            setUploadingProgress(24);
 
             const fileData = result.assets[0];
 
@@ -60,7 +61,7 @@ const HomeLandingPage = () => {
             };
 
             setUploadingState("Extracting data...");
-            setUploadingProgress(60);
+            setUploadingProgress(52);
 
             const res = await extractTextFromFile(storedFile);
 
@@ -72,10 +73,16 @@ const HomeLandingPage = () => {
                 setUploadingState("Embedding data...");
                 setUploadingProgress(60);
                 const embeddedText = await getEmbedding(res.text);
-            }
+                setUploadingState("Storing data...");
+                setUploadingProgress(80);
+                await storeEmbeddings(fileData.name, embeddedText!);
+            } else {
+                //TODO: Create a better alert component
+                return Alert.alert("Unable to embed file", "No text found in the uploaded file.");
+            };
 
-            setUploadingState("Storing data...");
-            setUploadingProgress(80);
+            setUploadingState("Finalizing...");
+            setUploadingProgress(90);
 
             await AsyncStorage.setItem("tutorKnowledge", JSON.stringify(storedFile));
             setFile(storedFile);
